@@ -1,79 +1,43 @@
+import nasaFetchData from "./nasaFetchData.js";
+
 export default function nasaImportMethod() {
     const main = document.querySelector('main');
 
     const tempDiv = document.createElement('div');
-    tempDiv.append(generateApiUrl());
-
-
-
+    tempDiv.append("Pending");
     main.replaceChildren(tempDiv);
-}
 
-// convert names to API IDs 
-function assignIdFromName(name) {
-    let id = -1;
+    const time = Date.now();
+    //nasaFetchData([['Earth',time]]);
+     nasaFetchData([['Sun',time],['Mercury',time],['Venus',time],['Earth',time],['Mars',time],['Jupiter',time],['Saturn',time],['Uranus',time],['Neptune',time],['Pluto',time],]);
 
-    const nameObject = {
-        Sun: 10,
-        Mercury: 199,
-        Venus: 299,
-        Earth: 399,
-        Mars: 499,
-        Jupiter: 599,
-        Saturn: 699,
-        Uranus: 799,
-        Neptune: 899
-    }
+    // create all input fields (including custom date picker)
 
-    if (nameObject.hasOwnProperty(name)) {
-        id = nameObject[name];
-    }
+    // option to add/ remove planets
+    // option for presets
 
-  
-    return id.toString();
-}
+    // when submiting - check values
 
-function generateApiUrl(name, type, time = { year, month, day }) {
-    const baseUrl = `https://ssd.jpl.nasa.gov/api/horizons.api?`;
+    // then call fetch data
 
-    const startTime = new Date(time.year, time.month, time.day);
-    const finalTime = new Date(startTime.getMilliseconds() + 86400000); // day later
+    // extract data
 
-    const startTimeString = `${startTime.getFullYear()}-${startTime.getMonth()}-${startTime.getDay()}`;
-    const finalTimeString = `${finalTime.getFullYear()}-${finalTime.getMonth()}-${finalTime.getDay()}`;
+    // go to simulation with imported data
 
-    const parametersObject = {
-        // Parameters info: https://ssd-api.jpl.nasa.gov/doc/horizons.html#ephem_type
-        // Common Parameters
-        //format: 'text', default = json
-        COMMAND: assignIdFromName(name),
-        OBJ_DATA: 'YES',
-        MAKE_EPHEM: 'YES',
-        EPHEM_TYPE: 'VECTORS',
-        EMAIL_ADDR: 'none',
-        // Ephemeris-Specific Parameters
-        CENTER: '@0',
-        REF_PLANE: 'ECLIPTIC',
-        COORD_TYPE: 'GEODETIC',
-        START_TIME: startTimeString,
-        STOP_TIME: finalTimeString,
-        STEP_SIZE: '2 d',
-        REF_SYSTEM: 'ICRF',
-        OUT_UNITS: 'KM-S',
-        VEC_TABLE: '3',
-        VEC_CORR: 'NONE',
-        TIME_DIGITS: 'MINUTES',
-        CSV_FORMAT: 'NO',
-        VEC_LABELS: 'YES',
-    }
 
-    let finalUrl = encodeURI(
-        baseUrl
-        .concat(...Object.entries(parametersObject)
-        .map(([key, value]) => `${key}='${value}'&` ))
-        .slice(0, -1)
-    );
+    /*
+    //console.log(generateApiUrl('Earth',{year:2020,month:12,day:2}));
+   // const header = new Headers({ "Access-Control-Allow-Origin": "*" });
+    console.log(generateApiUrl('Earth',{year:2020,month:12,day:2}))
 
-    return finalUrl;
+     // changing origin using Moesif to solve CORS during development
+    fetch(generateApiUrl('Earth', {year:2020,month:12,day:2}))
+    .then((response) => response.json())
+    .then(data => nasaExtractData(data.result))
+    .then(extractedObject => console.log(extractedObject))
+    .catch(err => console.log(err));
+   
+    */
 
+    
 }

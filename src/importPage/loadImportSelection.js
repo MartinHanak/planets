@@ -6,4 +6,10 @@ export default function loadImportSelection() {
     main.replaceChildren(...importOptions.map(option => option.getDomElement()));
     console.log(importOptions);
 
+    // import type selection = presets / custom / load empty and build in the app
+
+    // 
+
+
+
 }

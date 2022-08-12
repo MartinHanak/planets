@@ -1,10 +1,10 @@
+import loadImportSelection from './importPage/loadImportSelection.js';
 
-console.log("Hello World!");
+// images have to be loaded so that webpack copies them into the dist folder
+// same for css
+import nasaIcon from './images/nasa-icon.jpg';
+import cssStyle from './style.css';
 
-export function sum(a, b) {
-    return a + b;
-  }
 
-export function product(a,b) {
-    return a*b;
-  }
+loadImportSelection();
+

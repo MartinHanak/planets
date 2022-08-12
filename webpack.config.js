@@ -8,11 +8,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// easy way to separate multiple html files
 /*
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+let htmlPages = ['import'];
+let multipleHtmlPlugins = htmlPages.map(name => {
+  return new HtmlWebpackPlugin({
+    template: `./src/${name}.html`, // relative path to the HTML files
+    filename: `${name}.html`, // output HTML files
+    chunks: [`${name}`] // respective JS files
+  })
+});
 */
 
 
@@ -23,10 +28,14 @@ const stylesHandler = isProduction
   : "style-loader";
 
 const config = {
-  entry: "./src/index.js",
+  entry: {
+    index: "./src/index.js",
+    //import: "./src/import.js",
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
+    assetModuleFilename: './assets/[name][ext]',
   },
   devServer: {
     open: true,
@@ -35,6 +44,7 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html",
+      chunks: ['index']
     }),
     new CleanWebpackPlugin({
       cleanAfterEveryBuildPatterns: ['dist']
@@ -43,6 +53,7 @@ const config = {
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
+  //.concat(multipleHtmlPlugins),
   module: {
     rules: [
       {
