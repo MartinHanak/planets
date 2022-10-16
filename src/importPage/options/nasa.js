@@ -11,7 +11,7 @@ export default function nasaImportMethod() {
     main.replaceChildren(tempDiv);
 
     const time = Date.now();
-    //nasaFetchData([['Earth',time]]);
+
     nasaFetchData([['Sun',time],['Mercury',time],['Venus',time],['Earth',time],['Mars',time],['Jupiter',time],['Saturn',time],['Uranus',time],['Neptune',time],['Pluto',time],])
     .then(loadSimulation)
     .catch(err => loadErrorPage(err));

@@ -1,8 +1,13 @@
-import simulationControls from './simulationControls.js'
+import { canvas } from './canvas/canvas.js';
+import { displayState } from '../displayState.js';
 
 export default function loadSimulation() {
     const main = document.querySelector('main');
 
-    main.replaceChildren(...simulationControls.map(control => control.getDomElement()));
+    main.replaceChildren();
+
+    canvas.createCanvas();
+
+    displayState.startAnimation();
     
 }
