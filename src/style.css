@@ -1,3 +1,4 @@
+/* COMMON */
 * {
     margin: none;
     padding: none;
@@ -6,6 +7,39 @@
     outline: none;
     background-color: none;
 }
+
+/* NAVIGATION */
+
+nav > ul{
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+nav > ul > li {
+    background-color: rgb(0, 206, 247);
+    padding: 1rem;
+}
+
+nav > ul > li > a {
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+
+.pull-right {
+    margin-left: auto;
+}
+
+
+
+
+/* IMPORT */
 
 .import-option {
     display: inline-block;
@@ -31,3 +65,4 @@
     height: 500px;
     background-color: red;
 }
+

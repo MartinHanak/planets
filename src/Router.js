@@ -11,6 +11,7 @@ export const Router = (() => {
         '/import' : loadImportSelection,
         '/error' : loadErrorPage,
         '/simulation' : loadSimulation,
+        '/loading' : loadLoadingPage
     };
 
     const getCurrentPage = () => {
@@ -18,7 +19,12 @@ export const Router = (() => {
     };
 
     const renderPage = (page) => {
-        page in routes ? routes[page]() : routes['/']() ;
+        console.log(page)
+        if (page in routes) {
+            routes[page]();
+        } else {
+            routes['/']();
+        }
     };
 
     return {
