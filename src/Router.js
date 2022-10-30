@@ -14,12 +14,15 @@ export const Router = (() => {
         '/loading' : loadLoadingPage
     };
 
+
     const getCurrentPage = () => {
         return window.location.pathname;
     };
 
     const renderPage = (page) => {
-        console.log(page)
+        console.log(page);
+        console.log(routes[page]);
+        const loadFunction = routes[page];
         if (page in routes) {
             routes[page]();
         } else {
@@ -32,4 +35,3 @@ export const Router = (() => {
         renderPage,
     };
 })();
-

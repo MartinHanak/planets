@@ -3,9 +3,8 @@ import { canvas } from './simulationPage/canvas/canvas.js';
 export const displayState = (() => {
 
     const cameraPosition = {
-        center: [0,0,0],
-        altAziAngles: [0,0],
-        distance: 1.0,
+        center: [10,0,0],
+        basisVectors: [[-0.5,-0.5,0.707106781],[-0.707106781,0.707106781,0],[-0.5,-0.5,-0.707106781]]
     }
 
     const animation = {
@@ -16,8 +15,20 @@ export const displayState = (() => {
         stepsPerFrame: 10.0,
     }
 
+    const staticImages = {};
+    const currentImageData = {};
+
     const getCameraPosition = () => {
         return cameraPosition;
+    }
+
+    const getAnimationSettings = () => {
+        return animation;
+    }
+
+    const setDisplayState = (cameraPos, animationSettings) => {
+        cameraPosition = {...cameraPos};
+        animation = {...animationSettings};
     }
 
     const startAnimation = () => {
@@ -33,7 +44,7 @@ export const displayState = (() => {
 
     const createNextFrame = (timeStamp) => {
         // check fps
-        console.log(timeStamp);
+        // console.log(timeStamp);
 
         // update positions
 
@@ -46,10 +57,37 @@ export const displayState = (() => {
         }
     }
 
+    // input = array of objects {Earth: imgObjEarth, ...}
+    const updateStaticImages = (namedImgObjects) => {
+        for (const name in namedImgObjects) {
+            staticImages[name] = namedImgObjects[name];
+        }
+    }
+
+    const getStaticImages = () => {
+        return staticImages;
+    }
+
+    const updateCurrentImageData = (namedImgData) => {
+        for (const name in namedImgData) {
+            currentImageData[name] = namedImgData[name];
+        }
+    }
+    
+    const getCurrentImageData = () => {
+        return currentImageData;
+    }
+
     return {
         getCameraPosition,
+        getAnimationSettings,
+        setDisplayState,
         startAnimation,
-        stopAnimation
+        stopAnimation,
+        updateStaticImages,
+        getStaticImages,
+        updateCurrentImageData,
+        getCurrentImageData
     }
 
 

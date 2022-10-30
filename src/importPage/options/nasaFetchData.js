@@ -1,5 +1,6 @@
 import nasaExtractData from "./nasaExtractData.js";
 import { massObjectState } from "../../massObjectState.js";
+import { displayState } from "../../displayState.js";
 
 // expects array of dublets [name,time] 
 // time in format getTime(): returns the number of milliseconds since January 1, 1970 00:00:00.
@@ -32,6 +33,9 @@ export default async function nasaFetchData(inputArray) {
     extractedData.forEach(obj => massObjectState.addObject(obj));
 
     massObjectState.listObjects();
+
+    localStorage.setItem("massObjects", JSON.stringify(massObjectState.getObjects()));
+    localStorage.setItem("displayState", JSON.stringify([displayState.getCameraPosition(),displayState.getAnimationSettings()]));
 
 }
 

@@ -24,10 +24,20 @@ export const massObjectState = (() => {
         console.log(massObjects);
     }
 
+    const getObjects = () => {
+        return massObjects;
+    }
+
+    const setObjectState = (massObjectArray) => {
+        massObjects = [...massObjectArray];
+    }
+
     return {
         listObjects,
+        getObjects,
         addObject,
         removeObject,
+        setObjectState
     };
 
 })();

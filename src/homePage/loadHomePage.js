@@ -14,22 +14,8 @@ export default function loadHomePage() {
         loadImportSelection();
     });
 
-    const importLink = document.createElement('a');
-    importLink.href = "/import";
-    importLink.innerText = "Import";
-    importLink.addEventListener('click', (e) => {
-        e.preventDefault();
 
-        let state = null;
-        let title = "";
-        let path = "/import";
-
-        history.pushState(state,title,path);
-        Router.renderPage("/import");
-
-    });
-
-    main.replaceChildren(header, importButton, importLink);
+    main.replaceChildren(header, importButton);
     
 
 }
