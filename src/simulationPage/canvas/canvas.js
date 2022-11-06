@@ -1,4 +1,5 @@
 import { displayState } from "../../displayState.js";
+import { massObjectState } from "../../massObjectState.js";
 import { imageGenerator } from "../imageGenerator/imageGenerator.js";
 
 export const canvas = (() => {
@@ -41,12 +42,10 @@ export const canvas = (() => {
             }
 
             displayState.updateStaticImages(newStaticImages);
-        })
-        .then( results => {
+        }).then( results => {
             imageGenerator.initializeTextureImageData();
-        })
-        .then( results => {
-            imageGenerator.updateCurrentImageData(["Earth"]);
+        }).then( results => {
+            imageGenerator.updateCurrentImageData();
         })
         .catch(err => console.log(err));
     }
@@ -54,16 +53,21 @@ export const canvas = (() => {
     // render planets based on massObjectState and displayState
     const renderMassObjects = () => {
         const images = displayState.getStaticImages();
-        const imageData = displayState.getCurrentImageData();
-/*
+        /*
         for (const name in images) {
             renderImage(images[name], [250,0],0.2);
         }
         */
+        const massObjects = massObjectState.getObjects();
 
-        for (const name in imageData) {
-            ctx.putImageData(imageData[name],-250,0);
+        for (const massObject of massObjects) {
+            let moID = massObject.visualInfo.currentImageData;
+            
+            if(moID != null) {
+                ctx.putImageData(moID,0,0);
+            }
         }
+
         console.log("rendering");
     }
 

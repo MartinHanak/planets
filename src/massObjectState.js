@@ -28,13 +28,33 @@ export const massObjectState = (() => {
         return massObjects;
     }
 
+    const getObjectByName = (name) => {
+        let desiredMassObject;
+        
+        for (const massObject of massObjects) { 
+            if (massObject.name === name) {
+                desiredMassObject = massObject;
+                break;
+            }
+        }
+
+        return desiredMassObject;
+    }
+
     const setObjectState = (massObjectArray) => {
         massObjects = [...massObjectArray];
+    }
+
+    const updateRotationInfo = () => {
+        for (const massObject of massObjects) {
+            massObject.updateRotationInfo();
+        }
     }
 
     return {
         listObjects,
         getObjects,
+        getObjectByName,
         addObject,
         removeObject,
         setObjectState

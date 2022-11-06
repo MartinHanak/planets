@@ -1,18 +1,25 @@
 import { displayState } from "../../displayState.js";
+import { massObjectState } from "../../massObjectState.js";
 
 export const imageGenerator = (() => {
 
-    const textureImageData = {};
+    // OLD: const textureImageData = {};
 
-    const updateCurrentImageData = (nameArray) => {
+    const updateCurrentImageData = () => {
+        const massObjects = massObjectState.getObjects();
 
-        for (const name in textureImageData) {
-            let newImageData = generateImageData(textureImageData[name]);
-            const newCurrentImageData = {[name] : newImageData};
-
-            // update display state
-            displayState.updateCurrentImageData(newCurrentImageData);
+        for (const massObject of massObjects) {
+            let newImageData = generateImageData(massObject.name);
+            massObject.visualInfo.currentImageData = newImageData;
         }
+
+    }
+
+    const getNextFrameImageData = (name) => {
+
+        return new Promise((resolve, reject) => {
+            resolve(generateImageData(name));
+        });
 
     }
 
@@ -36,64 +43,140 @@ export const imageGenerator = (() => {
 
                 tempctx.drawImage(textureImage,0,0);
 
-                textureImageData[textureName] = tempctx.getImageData(0,0,tempCanvas.width,tempCanvas.height);
+                //textureImageData[textureName] = tempctx.getImageData(0,0,tempCanvas.width,tempCanvas.height);
+                const massObject = massObjectState.getObjectByName(textureName);
+
+
+                if (massObject !== undefined) {
+                    massObject.visualInfo.textureImageData = tempctx.getImageData(0,0,tempCanvas.width,tempCanvas.height);
+                }
             }
         }
     }
 
     // private
 
-    const generateImageData = (textureID) => {
-        const finalImageRadius = 500;
+    const generateImageData = (name) => {
+        const massObject = massObjectState.getObjectByName(name);
+        const textureID = massObject.visualInfo.textureImageData;
 
-        const width = finalImageRadius*2;
-        const height = finalImageRadius*2;
-        const newImageData = new ImageData(width,height);
+        if (textureID != null) {
+            const finalImageRadius = 100;
 
-        for (let i = 0; i < newImageData.data.length; i += 4) {
-
-            // x,y coordinates for a given pixel
-            // origin = center
-            // half of pixel size added
-            let pixelIndex = Math.round(i / 4);
-            let x = pixelIndex % width - width / 2 + 0.5;
-            let y =  Math.floor(pixelIndex / width) - height / 2 + 0.5;
+            const width = finalImageRadius*2;
+            const height = finalImageRadius*2;
+            const newImageData = new ImageData(width,height);
 
             const radiusSquared = width*width / 4;
 
-            if ( x*x + y*y < radiusSquared) {
-                // update pixel only in this case
-                let sphereVector = inverseSphereToPlaneProjection([x,y],finalImageRadius);
-                let [r,theta,phi] = cartesianToSphericalCoordinates(sphereVector, finalImageRadius);
 
-                let thetaDeg = theta * 180 / Math.PI;
-                let phiDeg = phi * 180 / Math.PI;
+            // 1st and 2nd vector = camera tilt
+            // 3rd vector = point of view
+            // rotate these vectors to get image from the correct angle
+            const rotatedCameraVectors = rotateCameraVectors(displayState.getCameraPosition().basisVectors, name);
+            const planeVectorOne = rotatedCameraVectors[0];
+            const planeVectorTwo = rotatedCameraVectors[1];
+            const cameraPOV = rotatedCameraVectors[2];
 
-                let [red,green,blue,alpha] = getTextureColorFromSphericalCoor(textureID,thetaDeg,phiDeg);
-                // Modify pixel data
-                newImageData.data[i + 0] = red;        // R value
-                newImageData.data[i + 1] = green;        // G value
-                newImageData.data[i + 2] = blue ;     // B value
-                newImageData.data[i + 3] = alpha;      // A value
+
+            for (let i = 0; i < newImageData.data.length; i += 4) {
+
+                // x,y coordinates for a given pixel
+                // origin = center
+                // half of pixel size added
+                let pixelIndex = Math.round(i / 4);
+                let x = pixelIndex % width - width / 2 + 0.5;
+                let y =  Math.floor(pixelIndex / width) - height / 2 + 0.5;
+
+                if ( x*x + y*y < radiusSquared) {
+                    // update pixel only in this case
+                    let sphereVector = inverseSphereToPlaneProjection([x,y],finalImageRadius,[planeVectorOne,planeVectorTwo,cameraPOV]);
+                    let [r,theta,phi] = cartesianToSphericalCoordinates(sphereVector, finalImageRadius);
+
+                    let thetaDeg = theta * 180 / Math.PI;
+                    let phiDeg = phi * 180 / Math.PI;
+
+                    let [red,green,blue,alpha] = getTextureColorFromSphericalCoor(textureID,thetaDeg,phiDeg);
+
+                    // Modify pixel data
+                    newImageData.data[i + 0] = red;        // R value
+                    newImageData.data[i + 1] = green;        // G value
+                    newImageData.data[i + 2] = blue ;     // B value
+                    newImageData.data[i + 3] = alpha;      // A value
+                }
+                
             }
-            
-        }
+            return newImageData;
+        } 
 
-        return newImageData;
+        return null;
+    }
+
+    const rotateCameraVectors = (vectors, massObjectName) => {
+        const massObject = massObjectState.getObjectByName(massObjectName);
+        const moRotationVector = massObject.rotationInfo.rotationVector;
+
+        let tempVectors = vectors;
+        /*
+        let tempVec = tempVectors[0];
+        tempVectors[0] = tempVectors[1];
+        tempVectors[1] = [(-1) * tempVec[0],(-1) * tempVec[1],(-1) * tempVec[2] ];
+        */
+
+        tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],90);
+    
+        tempVectors = rotateVectorsAroundUnitVector(tempVectors,[0,0,1],massObject.rotationInfo.currentAngle);
+
+        tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],-massObject.rotationInfo.rotationAngleDeg);
+
+        // 1st rotation = planet rotation tilted = rotation around y axis by a specific angle
+        /*
+        let rotAngle = massObject.rotationInfo.rotationAngleDeg * 2 * Math.PI / 360;
+        let tempCos = Math.cos(rotAngle);
+        let tempSin = Math.sin(rotAngle);
+        for(let i = 0; i < 3; i++) {
+            tempVectors[i] =    [
+                                    tempCos * tempVectors[i][0] + tempSin * tempVectors[i][2], 
+                                    tempVectors[i][1],
+                                    - tempSin * tempVectors[i][0] + tempCos * tempVectors[i][2]
+                                ]
+        }
+        */
+        
+        //tempVectors = rotateVectorsAroundUnitVector(tempVectors,[1,0,0],massObject.rotationInfo.rotationAngleDeg);
+
+        // 2nd rotation = rotation around the rot. axis
+        //tempVectors = rotateVectorsAroundUnitVector(tempVectors,moRotationVector,massObject.rotationInfo.currentAngle);
+
+        /*
+        rotAngle = -90 * 2 * Math.PI / 360;
+        tempCos = Math.cos(rotAngle);
+        tempSin = Math.sin(rotAngle);
+        for(let i = 0; i < 3; i++) {
+            tempVectors[i] =    [
+                                    tempCos * tempVectors[i][0] - tempSin * tempVectors[i][1],
+                                    tempSin * tempVectors[i][0] + tempCos * tempVectors[i][1],
+                                    tempVectors[i][2]
+                                ]
+        }
+        */
+
+
+        // 3rd rotation = defined by angles start and end points = possibly included in the image generation?
+        // final one: rotate camera vectors 1 and 2 by 90 degrees in the xy plane of newest frame
+        // can be done by simple vector switch and change of direction
+        /*
+        let tempVec = tempVectors[0];
+        tempVectors[0] = tempVectors[1];
+        tempVectors[1] = [(-1) * tempVec[0],(-1) * tempVec[1],(-1) * tempVec[2] ];
+        */
+
+        return tempVectors;
     }
 
 
     // get 3D sphere coordinates from 2D projected coordinates
-    const inverseSphereToPlaneProjection = ([X,Y], R = 1) => {
-
-
-        // 1st and 2nd vector = camera tilt
-        // 3rd vector = point of view
-        const cameraVectors = displayState.getCameraPosition().basisVectors;
-        
-        const planeVectorOne = cameraVectors[0];
-        const planeVectorTwo = cameraVectors[1];
-        const cameraPOV = cameraVectors[2];
+    const inverseSphereToPlaneProjection = ([X,Y], R = 1,[planeVectorOne,planeVectorTwo,cameraPOV]) => {
 
         // get non-zero component of the second camera basis vector
         // finite number error solved by inequality
@@ -177,7 +260,18 @@ export const imageGenerator = (() => {
             sphereVector[nonZeroComponent] = C + D * sphereVector[thirdComponent];
 
         } else {
-            throw new Error("Negative determinant while computing inverse sphere projection");
+            console.log("Negative determinant while computing inverse sphere projection");
+            console.log(planeVectorOne);
+            console.log(planeVectorTwo);
+            console.log(cameraPOV);
+            console.log(`nonZeroComponent: ${nonZeroComponent}`)
+            console.log(`nonZeroCombinationComponent: ${nonZeroCombinationComponent}`)
+            console.log(`thirdComponent: ${thirdComponent}`)
+            console.log("next frame");
+            
+            sphereVector[thirdComponent] = - (A*B + C*D)/(1 + B*B + D*D);
+            sphereVector[nonZeroCombinationComponent] = A + B * sphereVector[thirdComponent];
+            sphereVector[nonZeroComponent] = C + D * sphereVector[thirdComponent];
         }
 
         return sphereVector;
@@ -221,8 +315,9 @@ export const imageGenerator = (() => {
         const maximumPhi = 360;
         const maximumTheta = 180;
 
-        const fractionalXCoor = phi / maximumPhi;
-        const fractionalYCoor = theta / maximumTheta;
+
+        const fractionalXCoor = (phi + 180)/ maximumPhi;
+        const fractionalYCoor = theta/ maximumTheta;
 
         const XCoor = Math.round(fractionalXCoor * width);
         const YCoor = Math.round(fractionalYCoor * height);
@@ -238,8 +333,37 @@ export const imageGenerator = (() => {
 
     }
 
+    const rotateVectorsAroundUnitVector = (vectors, unitVector, angleDeg) => {
+        let resultVectors = [];
+        // Rodrigues' rotation formula
+        for(const vec of vectors) {
+            let scalarProduct = 0;
+            for(let i = 0; i < vec.length; i++) {
+                scalarProduct += vec[i]*unitVector[i]
+            }
+
+            // unitVec x vec
+            let vectorProduct = [null,null,null];
+            vectorProduct[0] = unitVector[1] * vec[2] - unitVector[2] * vec[1];
+            vectorProduct[1] = unitVector[2] * vec[0] - unitVector[0] * vec[2];
+            vectorProduct[2] = unitVector[0] * vec[1] - unitVector[1] * vec[0];
+
+            let tempCos = Math.cos(angleDeg * 2 * Math.PI / 360);
+            let tempSin = Math.sin(angleDeg * 2 * Math.PI / 360);
+
+            let tempVec = [null,null,null]
+            for (let i = 0; i < 3; i++) {
+                tempVec[i] = vec[i] * tempCos + vectorProduct[i] * tempSin + unitVector[i] * scalarProduct * (1 - tempCos);
+            }
+            resultVectors.push(tempVec);
+        }
+
+        return resultVectors;
+    }
+
     return {
         updateCurrentImageData,
-        initializeTextureImageData
+        initializeTextureImageData,
+        getNextFrameImageData
     }
 } )();

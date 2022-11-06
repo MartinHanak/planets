@@ -23,7 +23,7 @@ export default async function nasaFetchData(inputArray) {
     const responseJSON = await Promise.all(responseArray.map(response => response.json()))
     .catch('Error while parsing into JSON.');
 
-    responseJSON.forEach(instance => console.log(instance.result));
+    //responseJSON.forEach(instance => console.log(instance.result));
 
     const extractedData = await Promise.all(responseJSON.map(responseJSONinstance => nasaExtractData(responseJSONinstance.result)))
     .catch('Error while extracting data from JSON.');

@@ -1,4 +1,6 @@
 import { canvas } from './simulationPage/canvas/canvas.js';
+import { massObjectState } from './massObjectState.js';
+import { imageGenerator } from './simulationPage/imageGenerator/imageGenerator.js';
 
 export const displayState = (() => {
 
@@ -13,6 +15,7 @@ export const displayState = (() => {
         speed: 1.0,
         timeStep: 1.0,
         stepsPerFrame: 10.0,
+        cameraChanged: false
     }
 
     const staticImages = {};
@@ -46,9 +49,20 @@ export const displayState = (() => {
         // check fps
         // console.log(timeStamp);
 
+        // update rotation info if camera changed
+        if(animation.cameraChanged) {
+
+        }
+
         // update positions
 
-        // render new positions
+        // check if in-frame
+        updateIsInFrame();
+
+        // if in frame, update rotation info = renders new image data if needed
+        updateRotationInfo();
+
+        //  if in frame, render new positions
         canvas.renderMassObjects();
 
         // request another one 
@@ -77,6 +91,41 @@ export const displayState = (() => {
     const getCurrentImageData = () => {
         return currentImageData;
     }
+
+    const updateIsInFrame = () => {
+        const massObjects = massObjectState.getObjects();
+
+        for(const massObject of massObjects) {
+            if(massObject.name === "Earth") {
+                massObject.visualInfo.isInFrame = true;
+            }
+        }
+    }
+
+    const updateRotationInfo = () => {
+        const massObjects = massObjectState.getObjects();
+
+        for(const massObject of massObjects) {
+            if (massObject.visualInfo.isInFrame) {
+
+                massObject.rotationInfo.elapsedFrames += 1;
+
+                if (massObject.rotationInfo.elapsedFrames > massObject.rotationInfo.framesWithoutRotation) {
+                    massObject.rotationInfo.currentAngle += massObject.rotationInfo.nextAngleStep;
+                    massObject.rotationInfo.elapsedFrames = 0;
+
+                    // update planet image
+                    massObject.visualInfo.nextFrameImageData = imageGenerator.getNextFrameImageData(massObject.name)
+                    .then(newImageData => {
+                        massObject.visualInfo.currentImageData = newImageData;
+                        massObject.visualInfo.nextFrameImageData = null;
+                    });
+                }
+
+            }
+        }
+    }
+
 
     return {
         getCameraPosition,
