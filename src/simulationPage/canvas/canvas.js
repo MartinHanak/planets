@@ -1,6 +1,7 @@
 import { displayState } from "../../displayState.js";
 import { massObjectState } from "../../massObjectState.js";
 import { imageGenerator } from "../imageGenerator/imageGenerator.js";
+import { vectorCalculator } from "../vectorCalculator/vectorCalculator.js";
 
 export const canvas = (() => {
     const domCanvas = document.createElement('canvas');
@@ -29,11 +30,11 @@ export const canvas = (() => {
         toggleDisplay();
 
 
-        preloadAllImages(["Earth_texture.jpg"])
+        preloadAllImages(["Sun_texture.jpg","Mercury_texture.jpg","Venus_texture.jpg","Earth_texture.jpg","Mars_texture.jpg","Jupiter_texture.jpg","Saturn_texture.jpg","Uranus_texture.jpg","Neptune_texture.jpg","Pluto_texture.jpg","Default_texture.jpg",])
         .then(results => {
 
             const newStaticImages = {};
-            const names = ["EarthTexture"];
+            const names = ["SunTexture","MercuryTexture","VenusTexture","EarthTexture","MarsTexture","JupiterTexture","SaturnTexture","UranusTexture","NeptuneTexture","PlutoTexture","DefaultTexture",];
 
             let index = 0;
             for (const name of names) {
@@ -42,12 +43,16 @@ export const canvas = (() => {
             }
 
             displayState.updateStaticImages(newStaticImages);
-        }).then( results => {
             imageGenerator.initializeTextureImageData();
+            return imageGenerator.updateCurrentImageData();
         }).then( results => {
-            imageGenerator.updateCurrentImageData();
+            imageGenerator.updateCurrentImageBitmap();
         })
         .catch(err => console.log(err));
+    }
+
+    const getCanvasDim = () => {
+        return [domCanvas.width, domCanvas.height];
     }
 
     // render planets based on massObjectState and displayState
@@ -60,15 +65,75 @@ export const canvas = (() => {
         */
         const massObjects = massObjectState.getObjects();
 
+        //const canvasWidth = domCanvas.width;
+        //const canvasHeight = domCanvas.height;
+
+
+        // 1.5 AU = initial half-width of the canvas
+        //const pixelPerKm = canvasWidth / (2* 224396806 * 1000);
+
         for (const massObject of massObjects) {
-            let moID = massObject.visualInfo.currentImageData;
-            
-            if(moID != null) {
-                ctx.putImageData(moID,0,0);
+            let moBitmap = massObject.visualInfo.currentImageBitmap;
+
+            if(moBitmap != null && massObject.visualInfo.isInFrame) {
+
+                let displayedX = (massObject.projected2DPosition[0] ) ;
+                let displayedY = (massObject.projected2DPosition[1] ) ;
+
+                ctx.drawImage(moBitmap,displayedX,displayedY);
             }
         }
 
         console.log("rendering");
+    }
+
+    const clearCanvas = () => {
+        ctx.clearRect(0,0,domCanvas.width, domCanvas.height);
+    }
+
+    const drawAxis = () => {
+        const ratio = canvas.getPixelPerMeterRatio();
+        
+
+        let position3DKm = [domCanvas.width / (2 * ratio),0,0];
+        let radius = 10;
+        let width = 20;
+        let projectedPos = vectorCalculator.projectScaleZoomShiftVectorOntoCameraPlane(position3DKm,width, width);
+        ctx.beginPath();
+        ctx.arc(projectedPos[0], projectedPos[1], radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fill();
+
+        position3DKm = [0,domCanvas.width / (2 * ratio),0];
+        radius = 10;
+        width = 20;
+        projectedPos = vectorCalculator.projectScaleZoomShiftVectorOntoCameraPlane(position3DKm,width, width);
+        ctx.beginPath();
+        ctx.arc(projectedPos[0], projectedPos[1], radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        position3DKm = [0,0,domCanvas.width / (2 * ratio)];
+        radius = 10;
+        width = 20;
+        projectedPos = vectorCalculator.projectScaleZoomShiftVectorOntoCameraPlane(position3DKm,width, width);
+        ctx.beginPath();
+        ctx.arc(projectedPos[0], projectedPos[1], radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFFF00";
+        ctx.fill();
+
+        position3DKm = [0,0,0];
+        radius = 10;
+        width = 20;
+        projectedPos = vectorCalculator.projectScaleZoomShiftVectorOntoCameraPlane(position3DKm,width, width);
+        ctx.beginPath();
+        ctx.arc(projectedPos[0], projectedPos[1], radius, 0, Math.PI * 2);
+        //ctx.fillStyle = "#0000FF";
+        ctx.fill();
+    }
+
+    const getPixelPerMeterRatio = () => {
+        // canvas width in pixels = 3 times AU in meters (initial Earth distance from the Sun)
+        return domCanvas.width / ( 4.5e11 );
     }
 
     // PRIVATE METHODS
@@ -105,10 +170,15 @@ export const canvas = (() => {
         ctx.drawImage(img,0,0, img.naturalWidth, img.naturalHeight,x,y,img.naturalWidth*sizeFactor,img.naturalHeight*sizeFactor);
     }
 
+
     return {
         createCanvas,
+        getCanvasDim,
         toggleDisplay,
         renderMassObjects,
+        clearCanvas,
+        drawAxis, 
+        getPixelPerMeterRatio
     }
 
 })();

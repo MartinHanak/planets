@@ -3,11 +3,12 @@ import { displayState } from "./displayState.js";
 export default class MassObject {
     constructor(name,mass,x,y,z,vx,vy,vz) {
         this.name = name;
-        this.mass = mass;
-        this.position = [x,y,z];
-        this.velocity = [vx,vy,vz];
+        this.mass = mass; // kg 
+        this.position = [x,y,z]; // m 
+        this.velocity = [vx,vy,vz]; // m/sec 
         this.rotationInfo = getMassObjectRotationInfo(name);
         this.visualInfo =  getMassObjectVisualInfo(name);
+        this.projected2DPosition = [null, null];
     }
 
     updateRotationInfo() {
@@ -61,7 +62,7 @@ function getMassObjectRotationInfo(name) {
             rotationVector: null,
             rotationVectorProjectionLength: 0,
             currentAngle: 0,
-            nextAngleStep: 5,
+            nextAngleStep: 1,
             framesWithoutRotation: 10,
             elapsedFrames: 0
         },
@@ -154,7 +155,7 @@ function getMassObjectRotationInfo(name) {
     // initialize framesWithoutRotation
     for (const name in infoObjectMap) {
 
-        const baseNumber = 10;
+        const baseNumber = 60;
         infoObjectMap[name].framesWithoutRotation = Math.round(baseNumber * infoObjectMap[name].rotationSpeed);
 
     }
@@ -198,6 +199,8 @@ function getMassObjectVisualInfo(name) {
         nightTextureImageData: null,
         currentImageData : null,
         nextFrameImageData : null,
+        currentImageBitmap : null,
+        nextFrameImageBitmap : null,
         framesWithoutRotation : 0,
         isInFrame: false,
         radius: nameToRadius(name)

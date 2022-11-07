@@ -6,13 +6,30 @@ export const imageGenerator = (() => {
     // OLD: const textureImageData = {};
 
     const updateCurrentImageData = () => {
+
+        let promiseArray = [];
         const massObjects = massObjectState.getObjects();
 
         for (const massObject of massObjects) {
             let newImageData = generateImageData(massObject.name);
             massObject.visualInfo.currentImageData = newImageData;
+            promiseArray.push(new Promise((resolve,reject) => { resolve(newImageData)}));
         }
 
+        return Promise.all(promiseArray);
+
+    }
+
+    const updateCurrentImageBitmap = () => {
+        const massObjects = massObjectState.getObjects();
+
+        for (const massObject of massObjects) {
+            massObject.visualInfo.nextFrameImageBitmap = createImageBitmap(massObject.visualInfo.currentImageData)
+                .then(bitmap => {
+                    massObject.visualInfo.currentImageBitmap = bitmap;
+                    massObject.visualInfo.nextFrameImageBitmap = null;
+                })
+        }
     }
 
     const getNextFrameImageData = (name) => {
@@ -61,7 +78,7 @@ export const imageGenerator = (() => {
         const textureID = massObject.visualInfo.textureImageData;
 
         if (textureID != null) {
-            const finalImageRadius = 100;
+            const finalImageRadius = 50;
 
             const width = finalImageRadius*2;
             const height = finalImageRadius*2;
@@ -192,18 +209,22 @@ export const imageGenerator = (() => {
 
         // get second index for non-zero combination
         let nonZeroCombinationComponent;
-        let testCombination;
+        let testComponents = [];
+        let testCombinations = [];
         let nonZeroCombination;
         for(let i = 0; i < 3; i++) {
             if(i != nonZeroComponent) {
-                testCombination = planeVectorOne[i] - planeVectorOne[nonZeroComponent]/planeVectorTwo[nonZeroComponent]*planeVectorTwo[i];
-
-                if (testCombination != 0) {
-                    nonZeroCombinationComponent = i;
-                    nonZeroCombination = testCombination;
-                    break;
-                }
+                testCombinations.push( planeVectorOne[i] - planeVectorOne[nonZeroComponent]*(planeVectorTwo[i] /planeVectorTwo[nonZeroComponent]));
+                testComponents.push(i);
             }
+        }
+
+        if(Math.abs(testCombinations[0]) > Math.abs(testCombinations[1])) {
+            nonZeroCombinationComponent = testComponents[0];
+            nonZeroCombination = testCombinations[0];
+        } else {
+            nonZeroCombinationComponent = testComponents[1];
+            nonZeroCombination = testCombinations[1];
         }
 
         // third component
@@ -261,14 +282,18 @@ export const imageGenerator = (() => {
 
         } else {
             console.log("Negative determinant while computing inverse sphere projection");
-            console.log(planeVectorOne);
-            console.log(planeVectorTwo);
-            console.log(cameraPOV);
-            console.log(`nonZeroComponent: ${nonZeroComponent}`)
-            console.log(`nonZeroCombinationComponent: ${nonZeroCombinationComponent}`)
-            console.log(`thirdComponent: ${thirdComponent}`)
-            console.log("next frame");
-            
+            console.log("Input camera vectors:")
+            console.log(planeVectorOne)
+            console.log(planeVectorTwo)
+            console.log(cameraPOV)
+            console.log(`Non zero component: ${nonZeroComponent} `);
+            console.log(`Non zero combination index: ${nonZeroCombinationComponent}`);
+            console.log(`Third component: ${thirdComponent}`);
+            console.log(`Non-zero combination: ${nonZeroCombination}`);
+            console.log(`1st test combination: ${testCombinations[0]}`);
+            console.log(`2nd test combination: ${testCombinations[1]}`);
+
+
             sphereVector[thirdComponent] = - (A*B + C*D)/(1 + B*B + D*D);
             sphereVector[nonZeroCombinationComponent] = A + B * sphereVector[thirdComponent];
             sphereVector[nonZeroComponent] = C + D * sphereVector[thirdComponent];
@@ -364,6 +389,7 @@ export const imageGenerator = (() => {
     return {
         updateCurrentImageData,
         initializeTextureImageData,
-        getNextFrameImageData
+        getNextFrameImageData,
+        updateCurrentImageBitmap
     }
 } )();

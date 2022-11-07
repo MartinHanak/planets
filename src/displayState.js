@@ -5,8 +5,10 @@ import { imageGenerator } from './simulationPage/imageGenerator/imageGenerator.j
 export const displayState = (() => {
 
     const cameraPosition = {
-        center: [10,0,0],
-        basisVectors: [[-0.5,-0.5,0.707106781],[-0.707106781,0.707106781,0],[-0.5,-0.5,-0.707106781]]
+        center: [1.5e11,0,0],
+        basisVectors: [[-0.5,-0.5,0.707106781],[-0.707106781,0.707106781,0],[-0.5,-0.5,-0.707106781]],
+        zoom: 1.0,
+        distance: 1.5e11
     }
 
     const animation = {
@@ -14,7 +16,7 @@ export const displayState = (() => {
         startTime: 0,
         speed: 1.0,
         timeStep: 1.0,
-        stepsPerFrame: 10.0,
+        stepsPerFrame: 1.0,
         cameraChanged: false
     }
 
@@ -49,18 +51,40 @@ export const displayState = (() => {
         // check fps
         // console.log(timeStamp);
 
-        // update rotation info if camera changed
+        // clear canvas
+        canvas.clearCanvas();
+
+        // draw axis
+        canvas.drawAxis();
+
+        // update positions
+        massObjectState.updatePositions(animation.timeStep);
+
+        // subtract motion of Center Of Mass (COM)
+        massObjectState.subtractCOMmovement();
+
+        // center positions around chosen vector
+        massObjectState.centerPositions('Origin');
+
+        // project and zoom onto camera plane
+        massObjectState.projectZoomShiftPositions();
+
+        // project positions onto plane
+        //massObjectState.project2DPositions();
+
+        // apply zoom, check what planets are in frame
+        //massObjectState.applyZoom(cameraPosition.zoom);
+
+        // check if in-frame
+        massObjectState.updateIsInFrame();
+
+        // update rotation info and projected positions if camera changed
         if(animation.cameraChanged) {
 
         }
 
-        // update positions
-
-        // check if in-frame
-        updateIsInFrame();
-
         // if in frame, update rotation info = renders new image data if needed
-        updateRotationInfo();
+        //massObjectState.updateRotationInfo();
 
         //  if in frame, render new positions
         canvas.renderMassObjects();
@@ -91,41 +115,6 @@ export const displayState = (() => {
     const getCurrentImageData = () => {
         return currentImageData;
     }
-
-    const updateIsInFrame = () => {
-        const massObjects = massObjectState.getObjects();
-
-        for(const massObject of massObjects) {
-            if(massObject.name === "Earth") {
-                massObject.visualInfo.isInFrame = true;
-            }
-        }
-    }
-
-    const updateRotationInfo = () => {
-        const massObjects = massObjectState.getObjects();
-
-        for(const massObject of massObjects) {
-            if (massObject.visualInfo.isInFrame) {
-
-                massObject.rotationInfo.elapsedFrames += 1;
-
-                if (massObject.rotationInfo.elapsedFrames > massObject.rotationInfo.framesWithoutRotation) {
-                    massObject.rotationInfo.currentAngle += massObject.rotationInfo.nextAngleStep;
-                    massObject.rotationInfo.elapsedFrames = 0;
-
-                    // update planet image
-                    massObject.visualInfo.nextFrameImageData = imageGenerator.getNextFrameImageData(massObject.name)
-                    .then(newImageData => {
-                        massObject.visualInfo.currentImageData = newImageData;
-                        massObject.visualInfo.nextFrameImageData = null;
-                    });
-                }
-
-            }
-        }
-    }
-
 
     return {
         getCameraPosition,
