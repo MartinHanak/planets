@@ -1,5 +1,40 @@
 /* COMMON */
-* {
+
+:root {
+    --main-blue: #07489C;
+    --main-blue-2: #0D65D6;
+    --main-blue-3: #2B79DD;
+    --main-blue-4: #4F90E3;
+    --main-blue-5: #79ABEA;
+
+    --main-black: #101112;
+
+    --main-grey: #36383A;
+    --main-grey-2: #545658;
+    --main-grey-3: #707274;
+    --main-grey-4: #919294;
+
+    --main-yellow: #EDBB00;
+    --main-yellow-2: #FFC900;
+    --main-yellow-3: #FFCF1E;
+    --main-yellow-4: #FFD849;
+    --main-yellow-5: #FFE278;
+
+    --main-orange: #ED9300;
+    --main-orange-2: #FF9E00;
+    --main-orange-3: #FFA91E;
+    --main-orange-4: #FFBA49;
+    --main-orange-5: #FFCC78;
+
+    --main-bright-orange: #ED5800;
+    --main-bright-orange-2: #FF5F00;
+    --main-bright-orange-3: #FF721E;
+    --main-bright-orange-4: #FF8D49;
+    --main-bright-orange-5: #FFAA78;
+}
+
+
+*, *:before, *:after {
     margin: none;
     padding: none;
     box-sizing: border-box;
@@ -41,6 +76,10 @@ nav > ul > li > a {
 
 /* IMPORT */
 
+.import-form {
+    padding: 1rem 1rem;
+}
+
 .import-option {
     display: inline-block;
     max-width: 500px;
@@ -50,6 +89,114 @@ nav > ul > li > a {
 .import-option-icon {
     width: 50%;
 }
+
+.import-select-option {
+    height: 2em;
+}
+
+.import-options {
+    max-height: 3500px;
+    height: auto;
+    transition: max-height 1s ease-in-out;
+    overflow: hidden;
+}
+
+.disabled-import-options {
+    max-height: 4em;
+    
+}
+
+.form-error-message {
+    color: rgb(255, 36, 36);
+}
+
+/*
+    import - custom toggle
+*/
+
+.import-select-option-label {
+    margin: 1rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% -2rem);
+    height: 4rem;
+    position: relative;
+    user-select: none; 
+    cursor: pointer;
+    background-color: var(--main-orange-4);
+}
+
+.import-select-option-label input {
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem; 
+    /*
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%; 
+    cursor: pointer;
+    */
+    /* appearance: none; */
+}
+.import-select-option-label input:focus {
+    outline: none;
+}
+.import-select-option-label:focus-within {
+    outline: 1rem solid black;
+}
+
+.import-select-option-span {
+    display: inline-block;
+    position: relative;
+    pointer-events: none;
+    width: 5.5rem;
+    height: 3rem;
+    /*border-radius: 100vw;*/
+    /*box-shadow: inset 0px -1px 5px black; */
+    border: solid 1px;
+}
+.import-select-option-span::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0rem;
+    transform: translate3d(0, -50%, 0);
+    transition: transform .2s cubic-bezier(0.96, -0.11, 0, 1.12);
+    width: 3rem;
+    height: 3rem;
+    background-color: black;
+    /*border-radius: 100vw;*/
+}
+.import-select-option-label input:checked ~ .import-select-option-span::after  {
+    transform: translate3d(2.5rem, -50%, 0);
+}
+
+
+/*
+    date-picker
+*/
+
+.date-picker {
+    user-select: none;
+}
+.date-picker table td, .date-picker button {
+    cursor: pointer;
+}
+
+.date-picker-previous-month, .date-picker-next-month {
+    color: rgb(182, 182, 182);
+}
+
+.date-picker td:hover {
+    background-color: rgb(8, 170, 224);
+}
+
+/*
+    common
+*/
+
 
 .hidden {
     display: none;

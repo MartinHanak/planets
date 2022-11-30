@@ -6,9 +6,11 @@ export default class MassObject {
         this.mass = mass; // kg 
         this.position = [x,y,z]; // m 
         this.velocity = [vx,vy,vz]; // m/sec 
+        this.force = [0,0,0] // inital force acting on the object
         this.rotationInfo = getMassObjectRotationInfo(name);
         this.visualInfo =  getMassObjectVisualInfo(name);
         this.projected2DPosition = [null, null];
+        this.trajectory = [];
     }
 
     updateRotationInfo() {
@@ -203,7 +205,10 @@ function getMassObjectVisualInfo(name) {
         nextFrameImageBitmap : null,
         framesWithoutRotation : 0,
         isInFrame: false,
-        radius: nameToRadius(name)
+        displayTrajectory: false,
+        radius: nameToRadius(name),
+        displayedRadius: nameToRadius(name),
+        distanceFromCameraPOV: 0
     }
 
     return visualInfoObject;
@@ -212,21 +217,29 @@ function getMassObjectVisualInfo(name) {
 // radius in terms of Earth radius
 // Sun and bigger planets have to be scaled down to fit
 function nameToRadius(name) {
+
+    let radiusMultiplier = 1.0;
+    let result = 1.0;
+
     const radiusMap = {
-        'Sun' : 2,
-        'Mercury' : 0.4,
+        'Sun' : 1.1,
+        'Mercury' : 0.75,
         'Venus' : 0.95,
         "Earth" : 1.0,
-        "Mars" : 0.53,
-        "Jupiter" : 11,
-        "Saturn" : 9,
-        "Uranus" : 4,
-        "Pluto" : 0.2
+        "Mars" : 0.80,
+        "Jupiter" : 5,
+        "Saturn" : 4.8,
+        "Uranus" : 6,
+        "Pluto" : 4
     }
 
     if(name in radiusMap) {
-        return radiusMap[name];
+        radiusMultiplier = radiusMap[name];
     } else {
-        return 0.5;
+        radiusMultiplier = 0.5;
     }
+
+    result = 25*radiusMultiplier;
+
+    return result;
 }

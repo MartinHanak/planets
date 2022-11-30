@@ -28,6 +28,12 @@ export const imageGenerator = (() => {
                 .then(bitmap => {
                     massObject.visualInfo.currentImageBitmap = bitmap;
                     massObject.visualInfo.nextFrameImageBitmap = null;
+
+                    // if animation is not running, update by drawing one frame
+
+                    if(displayState.getAnimationState().run == false) {
+                        displayState.createNextFrameWithoutMoving();
+                    }
                 })
         }
     }
@@ -64,9 +70,9 @@ export const imageGenerator = (() => {
                 const massObject = massObjectState.getObjectByName(textureName);
 
 
-                if (massObject !== undefined) {
+                if (massObject !== undefined && massObject.visualInfo.textureImageData === null) {
                     massObject.visualInfo.textureImageData = tempctx.getImageData(0,0,tempCanvas.width,tempCanvas.height);
-                }
+                } 
             }
         }
     }
@@ -78,7 +84,7 @@ export const imageGenerator = (() => {
         const textureID = massObject.visualInfo.textureImageData;
 
         if (textureID != null) {
-            const finalImageRadius = 50;
+            const finalImageRadius = 25;
 
             const width = finalImageRadius*2;
             const height = finalImageRadius*2;
@@ -90,6 +96,8 @@ export const imageGenerator = (() => {
             // 1st and 2nd vector = camera tilt
             // 3rd vector = point of view
             // rotate these vectors to get image from the correct angle
+            //const rotatedCameraVectors = displayState.getCameraPosition().basisVectors;
+
             const rotatedCameraVectors = rotateCameraVectors(displayState.getCameraPosition().basisVectors, name);
             const planeVectorOne = rotatedCameraVectors[0];
             const planeVectorTwo = rotatedCameraVectors[1];
@@ -142,9 +150,10 @@ export const imageGenerator = (() => {
 
         tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],90);
     
-        tempVectors = rotateVectorsAroundUnitVector(tempVectors,[0,0,1],massObject.rotationInfo.currentAngle);
+        tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],massObject.rotationInfo.currentAngle);
 
-        tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],-massObject.rotationInfo.rotationAngleDeg);
+        tempVectors = rotateVectorsAroundUnitVector(tempVectors,[0,1,0],-massObject.rotationInfo.rotationAngleDeg);
+        
 
         // 1st rotation = planet rotation tilted = rotation around y axis by a specific angle
         /*

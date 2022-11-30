@@ -1,4 +1,369 @@
-export const defaultMassObjects = [
+export const defaultMassObjects = [{
+	"name": "Sun",
+	"mass": 1.9885e+30,
+	"position": [-1358376117.277729, 61480264.11254631, 31135333.04384185],
+	"velocity": [0.8498455497098208, -15.66401329864667, 0.11109420904789351],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 0,
+		"rotationDirection": 1,
+		"rotationSpeed": 0.04,
+		"rotationVector": [0, 0, 1],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 2,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Sun.jpg",
+		"texture": "SunTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "SunTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 27.500000000000004,
+		"displayedRadius": 27.500000000000004,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Mercury",
+	"mass": 3.3020000000000006e+23,
+	"position": [7167604059.753438, -67870258911.49451, -6302264660.462041],
+	"velocity": [38564.893863441226, 8549.851970890391, -2837.219436065179],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 2,
+		"rotationDirection": 1,
+		"rotationSpeed": 0.005681818181818182,
+		"rotationVector": [-0.9970697330600953, 0, 0.07649802229777117],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 0,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Mercury.jpg",
+		"texture": "MercuryTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "MercuryTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 18.75,
+		"displayedRadius": 18.75,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Venus",
+	"mass": 4.868500000000001e+24,
+	"position": [-10552495427.96238, -108257933954.7155, -925425730.968371],
+	"velocity": [34660.82930083452, -3110.992584831009, -2042.3490222140579],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 177,
+		"rotationDirection": -1,
+		"rotationSpeed": 0.004132231404958678,
+		"rotationVector": [0.28776090536782767, 0, -0.9577022822056384],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 0,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Venus.jpg",
+		"texture": "VenusTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "VenusTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 23.75,
+		"displayedRadius": 23.75,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Earth",
+	"mass": 5.97219e+24,
+	"position": [62448575416.21225, 133200596608.3842, 24278326.92103088],
+	"velocity": [-27358.22789830182, 12742.77492189001, 0.1439735989849922],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 23.5,
+		"rotationDirection": 1,
+		"rotationSpeed": 1,
+		"rotationVector": [-0.9615055844509361, 0, -0.27478539093202126],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 60,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Earth.jpg",
+		"texture": "EarthTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "EarthTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 25,
+		"displayedRadius": 25,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Mars",
+	"mass": 6.4171e+23,
+	"position": [76593405586.38094, 213622475581.5877, 2594861082.217917],
+	"velocity": [-21841.330619774053, 10354.01815475263, 753.2195606965581],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 25,
+		"rotationDirection": 1,
+		"rotationSpeed": 0.9803921568627451,
+		"rotationVector": [0.1709188927014062, 0, 0.9852851019465001],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 59,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Mars.jpg",
+		"texture": "MarsTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "MarsTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 20,
+		"displayedRadius": 20,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Jupiter",
+	"mass": 1.89818722e+27,
+	"position": [730157150023.2823, 115695701295.0785, -16815542226.670269],
+	"velocity": [-2195.00029215813, 13517.970131151611, -6.989694449240247],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 3,
+		"rotationDirection": 1,
+		"rotationSpeed": 2.5,
+		"rotationVector": [-0.7834868911723467, 0, -0.6214083129159855],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 150,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Jupiter.jpg",
+		"texture": "JupiterTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "JupiterTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 125,
+		"displayedRadius": 125,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Saturn",
+	"mass": 5.6834e+26,
+	"position": [1202514281481.417, -847520642880.1628, -33141301507.17264],
+	"velocity": [5024.241929706614, 7875.794139023731, -336.41435530034033],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 26,
+		"rotationDirection": 1,
+		"rotationSpeed": 2.2222222222222223,
+		"rotationVector": [-0.5441280875400463, 0, 0.8390021599197536],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 133,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Saturn.jpg",
+		"texture": "SaturnTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "SaturnTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 120,
+		"displayedRadius": 120,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Uranus",
+	"mass": 8.6813e+25,
+	"position": [2013943373071.551, 2145187724902.442, -18123714055.6134],
+	"velocity": [-5014.820834039876, 4343.900454819073, 81.26669015437238],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 97,
+		"rotationDirection": -1,
+		"rotationSpeed": 1.4285714285714286,
+		"rotationVector": [-0.21159690074745502, 0, 0.9773570236070704],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 86,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Uranus.jpg",
+		"texture": "UranusTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "UranusTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 150,
+		"displayedRadius": 150,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Neptune",
+	"mass": 1.02409e+26,
+	"position": [4449268127176.222, -456675336225.0448, -93133826882.35146],
+	"velocity": [518.9954571398114, 5439.120438831097, -123.9640430626356],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 29.6,
+		"rotationDirection": 1,
+		"rotationSpeed": 1.4925373134328357,
+		"rotationVector": [0.48377186517728316, 0, 0.8751941398700591],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 90,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Default.jpg",
+		"texture": "DefaultTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "DefaultTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 12.5,
+		"displayedRadius": 12.5,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}, {
+	"name": "Pluto",
+	"mass": 1.3069999999999998e+22,
+	"position": [2403698528128.525, -4587919458842.203, -204357035431.41342],
+	"velocity": [4955.856047324473, 1356.414244130442, -1558.6250129188638],
+	"force": [0, 0, 0],
+	"rotationInfo": {
+		"rotationAngleDeg": 122.5,
+		"rotationDirection": -1,
+		"rotationSpeed": 0.16666666666666666,
+		"rotationVector": [0.4031919738266848, 0, -0.9151154201748225],
+		"rotationVectorProjectionLength": 0,
+		"currentAngle": 0,
+		"nextAngleStep": 1,
+		"framesWithoutRotation": 10,
+		"elapsedFrames": 0
+	},
+	"visualInfo": {
+		"staticImage": "Pluto.jpg",
+		"texture": "PlutoTexture.jpg",
+		"textureImageData": null,
+		"nightTexture": "PlutoTextureNight.jpg",
+		"nightTextureImageData": null,
+		"currentImageData": null,
+		"nextFrameImageData": null,
+		"currentImageBitmap": null,
+		"nextFrameImageBitmap": null,
+		"framesWithoutRotation": 0,
+		"isInFrame": false,
+		"displayTrajectory": false,
+		"radius": 100,
+		"displayedRadius": 100,
+		"distanceFromCameraPOV": 0
+	},
+	"projected2DPosition": [null, null],
+	"trajectory": []
+}]
+
+
+/*
+
+[
     {"name":"Sun","mass":1.9885e+30,
     "position":[-1359856249.031502,111599851.87453671,30752349.17166454],
     "velocity":[0.08752170321181019,-15.691768609542661,0.1270000354871223]},
@@ -31,7 +396,14 @@ export const defaultMassObjects = [
     "velocity":[4975.113742989693,1338.8298794659681,-1585.808832102527]}
 ];
 
-export const defaultDisplayState = [
+*/
+
+export const defaultDisplayState = [{"center":[150000000000,0,0],"basisVectors":[[-0.5,-0.5,0.707106781],[-0.707106781,0.707106781,0],[-0.5,-0.5,-0.707106781]],"zoom":1,"verticalAngle":135,"horizontalAngle":45,"distance":300000000000},{"run":false,"startTime":0,"speed":1,"timeStep":0.1,"stepsPerFrame":1,"cameraChanged":false,"frameCounter":0}];
+
+
+
+/*
+[
     {"center":[0,0,0],
     "altAziAngles":[0,0],
     "distance":1},
@@ -41,3 +413,5 @@ export const defaultDisplayState = [
     "timeStep":1,
     "stepsPerFrame":10}
 ];
+
+*/

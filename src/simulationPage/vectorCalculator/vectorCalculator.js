@@ -27,6 +27,7 @@ export const vectorCalculator = (() => {
         return resultVector;
     }
 
+
     const projectOntoCameraPlane = (vector) => {
 
         const cameraVectors = displayState.getCameraPosition().basisVectors;
@@ -77,13 +78,24 @@ export const vectorCalculator = (() => {
     }
 
     const projectVectorOntoUnitVector = (vector, unitVector) => {
-        let scalarProduct = 0;
+        let projectionValue = 0;
         for(let i = 0; i < vector.length; i++) {
-            scalarProduct += vector[i] * unitVector[i];
+            projectionValue += vector[i] * unitVector[i];
         }
         
-        return scalarProduct;
+        return projectionValue;
 
+    }
+
+    const scalarProduct = (vec1, vec2) => {
+
+        let scalarVectorProduct = 0;
+
+        for(let i = 0; i < vec1.length; i++) {
+            scalarVectorProduct += vec1[i] * vec2[i];
+        }
+        
+        return scalarVectorProduct;
     }
 
     const addVectors = (vec1, vec2) => {
@@ -116,7 +128,8 @@ export const vectorCalculator = (() => {
         projectVectorOntoUnitVector,
         addVectors,
         multiplyVectorByScalar,
-        subtractSecondVector
+        subtractSecondVector,
+        scalarProduct
     }
 
 })();

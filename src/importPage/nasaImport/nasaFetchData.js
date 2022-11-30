@@ -23,20 +23,21 @@ export default async function nasaFetchData(inputArray) {
     const responseJSON = await Promise.all(responseArray.map(response => response.json()))
     .catch('Error while parsing into JSON.');
 
-    responseJSON.forEach(instance => console.log(instance.result));
+    //responseJSON.forEach(instance => console.log(instance.result));
 
     const extractedData = await Promise.all(responseJSON.map(responseJSONinstance => nasaExtractData(responseJSONinstance.result)))
     .catch('Error while extracting data from JSON.');
 
-    extractedData.forEach(instance => console.log(instance));
+    //extractedData.forEach(instance => console.log(instance));
 
-    extractedData.forEach(obj => massObjectState.addObject(obj));
-
-    massObjectState.listObjects();
-
-    localStorage.setItem("massObjects", JSON.stringify(massObjectState.getObjects()));
+    localStorage.setItem("massObjects", JSON.stringify(extractedData));
     localStorage.setItem("displayState", JSON.stringify([displayState.getCameraPosition(),displayState.getAnimationSettings()]));
 
+    console.log("extracted data")
+    console.log(JSON.stringify(extractedData));
+
+    console.log("default display")
+    console.log(JSON.stringify([displayState.getCameraPosition(),displayState.getAnimationSettings()]))
 }
 
 async function createPromise(name,time) {
