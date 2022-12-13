@@ -234,10 +234,6 @@ export const massObjectInfoController = (() => {
             container.appendChild(lineContainer);
         });
 
-
-
-
-
         return container;
     }
 

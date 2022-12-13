@@ -233,7 +233,7 @@ export const massObjectState = (() => {
 
         for(const massObject of massObjects) {
 
-            if(massObject.name =='Sun') {
+            if(massObject.name == 'Sun') {
                 massObject.visualInfo.isInFrame = true;
             } else {
 

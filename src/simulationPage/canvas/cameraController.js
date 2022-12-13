@@ -128,8 +128,20 @@ export const cameraController = (() => {
         return controllerContainer;
     }
 
+    const updateCameraControllers = () => {
+        updateCenterSelect();
+
+        let newHorizontalValue = displayState.getCameraPosition().horizontalAngle;
+        let newVerticalValue = displayState.getCameraPosition().verticalAngle;
+
+        horizontalPositionInput.value = newHorizontalValue;
+        verticalPositionInput.value = newVerticalValue;
+
+    }
+
     return {
         getDOMelement,
-        updateCenterSelect
+        updateCenterSelect,
+        updateCameraControllers
     }
 })();

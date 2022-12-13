@@ -166,22 +166,6 @@ export const displayState = (() => {
         // rotate around y-axis by verticalAngle
         // then rotate around z-axis by horizontalAngle
 
-        /*
-        let vecX = [-1.0, 0, 0];
-        let vecY = [0, 1.0, 0];
-        let vecZ = [0, 0, -1.0];
-
-        // rotation around y-axis
-        let vertCos = Math.cos(verticalAngle * Math.PI / 180);
-        let vertSin = Math.sin(verticalAngle * Math.PI / 180);
-
-        vecX = [-vertCos, 0, vertSin];
-        vecZ = [-vertSin, 0, - vertCos];
-
-        // rotation aroun z-axis
-
-        */
-
         let vertCos = Math.cos(-verticalAngle * Math.PI / 180);
         let vertSin = Math.sin(-verticalAngle * Math.PI / 180);
 

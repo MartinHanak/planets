@@ -12,12 +12,6 @@ export default class MassObject {
         this.projected2DPosition = [null, null];
         this.trajectory = [];
     }
-
-    updateRotationInfo() {
-        const cameraVectors = displayState.getCameraPosition().basisVectors;
-
-        // update
-    }
 }
 
 
@@ -137,7 +131,6 @@ function getMassObjectRotationInfo(name) {
     }
 
     // initialize rotation vectors
-    //rotationVector: generateRotationVector(this.rotationAngleDeg, this.rotationDirection, this.rotationSpeed),
     for (const name in infoObjectMap) {
         infoObjectMap[name].rotationVector = generateRotationVector(infoObjectMap[name].rotationAngleDeg, infoObjectMap[name].rotationDirection, infoObjectMap[name].rotationSpeed);
     }
@@ -165,7 +158,6 @@ function getMassObjectRotationInfo(name) {
     if (name in infoObjectMap) {
         return infoObjectMap[name];
     } else {
-        // default settings
         return defaultRotationInfo;
     }
 }
@@ -206,6 +198,7 @@ function getMassObjectVisualInfo(name) {
         framesWithoutRotation : 0,
         isInFrame: false,
         displayTrajectory: false,
+        displayName: false,
         radius: nameToRadius(name),
         displayedRadius: nameToRadius(name),
         distanceFromCameraPOV: 0
@@ -239,7 +232,7 @@ function nameToRadius(name) {
         radiusMultiplier = 0.5;
     }
 
-    result = 25*radiusMultiplier;
+    result = 25 * radiusMultiplier;
 
     return result;
 }

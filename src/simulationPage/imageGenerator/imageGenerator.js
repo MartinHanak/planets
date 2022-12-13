@@ -142,60 +142,12 @@ export const imageGenerator = (() => {
         const moRotationVector = massObject.rotationInfo.rotationVector;
 
         let tempVectors = vectors;
-        /*
-        let tempVec = tempVectors[0];
-        tempVectors[0] = tempVectors[1];
-        tempVectors[1] = [(-1) * tempVec[0],(-1) * tempVec[1],(-1) * tempVec[2] ];
-        */
 
         tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],90);
     
         tempVectors = rotateVectorsAroundUnitVector(tempVectors,tempVectors[2],massObject.rotationInfo.currentAngle);
 
         tempVectors = rotateVectorsAroundUnitVector(tempVectors,[0,1,0],-massObject.rotationInfo.rotationAngleDeg);
-        
-
-        // 1st rotation = planet rotation tilted = rotation around y axis by a specific angle
-        /*
-        let rotAngle = massObject.rotationInfo.rotationAngleDeg * 2 * Math.PI / 360;
-        let tempCos = Math.cos(rotAngle);
-        let tempSin = Math.sin(rotAngle);
-        for(let i = 0; i < 3; i++) {
-            tempVectors[i] =    [
-                                    tempCos * tempVectors[i][0] + tempSin * tempVectors[i][2], 
-                                    tempVectors[i][1],
-                                    - tempSin * tempVectors[i][0] + tempCos * tempVectors[i][2]
-                                ]
-        }
-        */
-        
-        //tempVectors = rotateVectorsAroundUnitVector(tempVectors,[1,0,0],massObject.rotationInfo.rotationAngleDeg);
-
-        // 2nd rotation = rotation around the rot. axis
-        //tempVectors = rotateVectorsAroundUnitVector(tempVectors,moRotationVector,massObject.rotationInfo.currentAngle);
-
-        /*
-        rotAngle = -90 * 2 * Math.PI / 360;
-        tempCos = Math.cos(rotAngle);
-        tempSin = Math.sin(rotAngle);
-        for(let i = 0; i < 3; i++) {
-            tempVectors[i] =    [
-                                    tempCos * tempVectors[i][0] - tempSin * tempVectors[i][1],
-                                    tempSin * tempVectors[i][0] + tempCos * tempVectors[i][1],
-                                    tempVectors[i][2]
-                                ]
-        }
-        */
-
-
-        // 3rd rotation = defined by angles start and end points = possibly included in the image generation?
-        // final one: rotate camera vectors 1 and 2 by 90 degrees in the xy plane of newest frame
-        // can be done by simple vector switch and change of direction
-        /*
-        let tempVec = tempVectors[0];
-        tempVectors[0] = tempVectors[1];
-        tempVectors[1] = [(-1) * tempVec[0],(-1) * tempVec[1],(-1) * tempVec[2] ];
-        */
 
         return tempVectors;
     }
